@@ -7,20 +7,36 @@ using TMPro;
 
 public class GameManager : MonoBehaviour
 {
-    public bool isGameActive;
+    [SerializeField]private List<GameObject> _targets;
+    [SerializeField]private TextMeshProUGUI _scoreText;
+    [SerializeField]private TextMeshProUGUI _gameoverText;
+    [SerializeField]private TextMeshProUGUI _livesText;
+    [SerializeField]private Button _restartButton;
+    [SerializeField]private GameObject _titleScreen;
+    [SerializeField]private GameObject _pauseScreen;
+    private int _score;
+    private int _lives;
+    private bool _gamePaused;
+    private float _spawnRate = 1.0f;
 
-    [SerializeField]private List<GameObject> targets;
-    [SerializeField]private TextMeshProUGUI scoreText;
-    [SerializeField]private TextMeshProUGUI gameoverText;
-    [SerializeField]private TextMeshProUGUI livesText;
-    [SerializeField]private Button restartButton;
-    [SerializeField]private GameObject titleScreen;
-    [SerializeField]private GameObject pauseScreen;
-    private int score;
-    private int lives;
-    private bool gamePaused;
-    private float spawnRate = 1.0f;
-   
+
+    public static GameManager Instance { get; private set; }
+    
+    public bool IsGameActive { get; private set;}
+
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+
     void Update()
     {
         if(Input.GetKeyDown(KeyCode.P)) 
@@ -31,65 +47,62 @@ public class GameManager : MonoBehaviour
 
     IEnumerator SpawnTarget()
     {
-        while (isGameActive)
+        while (IsGameActive)
         {
-            yield return new WaitForSeconds(spawnRate);
-            int index = Random.Range(0, targets.Count);
-            Instantiate(targets[index]);
+            yield return new WaitForSeconds(_spawnRate);
+            int index = Random.Range(0, _targets.Count);
+            Instantiate(_targets[index]);
         }
     }
 
     public void UpdateScore(int scoreToAdd)
     {
-        score += scoreToAdd;
-        scoreText.text = "Score: " + score;
-        livesText.text = "Lives: " + lives;
-       
+        _score += scoreToAdd;
+        _scoreText.text = "Score: " + _score;
+        _livesText.text = "Lives: " + _lives;
     }
 
     public void GameOver()
     {
-        restartButton.gameObject.SetActive(true);
-        gameoverText.gameObject.SetActive(true);
-        isGameActive = false;
+        _restartButton.gameObject.SetActive(true);
+        _gameoverText.gameObject.SetActive(true);
+        IsGameActive = false;
     }
 
     public void RestartGame()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-
     }
 
     public void StartGame(int difficulty)
     {
-        spawnRate /= difficulty;
-        isGameActive = true;
+        _spawnRate /= difficulty;
+        IsGameActive = true;
         StartCoroutine(SpawnTarget());
-        score = 0;
-        lives = 3;
-        livesText.text = "Lives: " + lives;
+        _score = 0;
+        _lives = 3;
+        _livesText.text = "Lives: " + _lives;
         UpdateScore(0);
-        titleScreen.gameObject.SetActive(false);
+        _titleScreen.gameObject.SetActive(false);
     }
 
     public void UpdateLives(int livesToUpdate)
     {
-        lives += livesToUpdate;
-        if(lives<= 0 )
+        _lives += livesToUpdate;
+        if(_lives<= 0 )
         {
-             lives = 0;
+             _lives = 0;
              GameOver();
         }
-        livesText.text = "Lives: " + lives;
-
+        _livesText.text = "Lives: " + _lives;
     }
 
     private void TogglePause()
     {
-        gamePaused = !gamePaused;
-        isGameActive = !isGameActive;
+        _gamePaused = !_gamePaused;
+        IsGameActive = !IsGameActive;
 
-        if( gamePaused )
+        if( _gamePaused )
         {
             Time.timeScale = 0;
         }
@@ -97,6 +110,6 @@ public class GameManager : MonoBehaviour
         {
             Time.timeScale = 1;
         }
-        pauseScreen.SetActive(gamePaused);
+        _pauseScreen.SetActive(_gamePaused);
     }
 }

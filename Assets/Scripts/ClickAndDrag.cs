@@ -4,50 +4,45 @@ using UnityEngine;
 [RequireComponent(typeof(TrailRenderer), typeof(BoxCollider))]
 public class ClickAndDrag : MonoBehaviour
 {
-    private GameManager gameManager;
-    private Camera cam;
-    private Vector3 mousePos;
-    private TrailRenderer trail;
-    private BoxCollider col;
-    private bool swiping = false;
+    [SerializeField] private GameManager _gameManager;
+    [SerializeField] private Camera _cam;
+    [SerializeField] private TrailRenderer _trail;
+    [SerializeField] private BoxCollider _col;
+    [SerializeField] private Vector3 _mousePos;
+    private bool _swiping = false;
 
     void Awake()
     {
-        cam = Camera.main;
-        trail = GetComponent<TrailRenderer>();
-        col = GetComponent<BoxCollider>();
-        trail.enabled = false;
-        col.enabled = false;
-
-        gameManager = GameObject.Find("Game Manager").GetComponent<GameManager>();
+        _trail.enabled = false;
+        _col.enabled = false;
     }
     void UpdateMousePosition()
     {
-        mousePos = cam.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10.0f));
-        transform.position = mousePos;
+        _mousePos = _cam.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10.0f));
+        transform.position = _mousePos;
     }
 
     void UpdateComponents()
     {
-        trail.enabled = swiping;
-        col.enabled = swiping;
+        _trail.enabled = _swiping;
+        _col.enabled = _swiping;
     }
 
     void Update()
     {
-        if (gameManager.isGameActive)
+        if (_gameManager.IsGameActive)
         {
             if (Input.GetMouseButtonDown(0))
             {
-                swiping = true;
+                _swiping = true;
                 UpdateComponents();
             }
             else if (Input.GetMouseButtonUp(0))
             {
-                swiping = false;
+                _swiping = false;
                 UpdateComponents();
             }
-            if (swiping)
+            if (_swiping)
             {
                 UpdateMousePosition();
             }
@@ -55,10 +50,11 @@ public class ClickAndDrag : MonoBehaviour
     }
 
     void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject.GetComponent<Target>())
+    { 
+        Target _target = collision.gameObject.GetComponent<Target>();
+        if (_target)
         {
-            collision.gameObject.GetComponent<Target>().DestroyTarget();
+            _target.DestroyTarget();
         }
     }
 }

@@ -2,22 +2,22 @@ using UnityEngine;
 
 public class Target : MonoBehaviour
 {
-    [SerializeField]private int pointValue;
-    [SerializeField]private ParticleSystem explosionParticle;
-    private Rigidbody targetRb;
-    private GameManager gameManager;
-    private float minSpeed = 12f;
-    private float maxSpeed = 16f;
-    private float maxTorque = 10f;
-    private float xRange = 4f;
-    private float ySpawnPos = -2f;
+    [SerializeField]private int _pointValue;
+    [SerializeField]private ParticleSystem _explosionParticle;
+    [SerializeField]private Rigidbody _targetRb;
+    [SerializeField]private GameManager _gameManager;
+    private float _minSpeed = 12f;
+    private float _maxSpeed = 16f;
+    private float _maxTorque = 10f;
+    private float _xRange = 4f;
+    private float _ySpawnPos = -2f;
+    private int enemyLayer = 3;
 
     void Start()
     {
-        targetRb = GetComponent<Rigidbody>();
-        gameManager = GameObject.Find("Game Manager").GetComponent<GameManager>();
-        targetRb.AddForce(RandomForce(), ForceMode.Impulse);
-        targetRb.AddTorque(RandomTorque(), RandomTorque(), RandomTorque(), ForceMode.Impulse);
+        _gameManager = GameManager.Instance;
+        _targetRb.AddForce(RandomForce(), ForceMode.Impulse);
+        _targetRb.AddTorque(RandomTorque(), RandomTorque(), RandomTorque(), ForceMode.Impulse);
 
         transform.position = RandomSpawnPos();
     }
@@ -25,33 +25,33 @@ public class Target : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {       
         Destroy(gameObject);
-        if(!gameObject.CompareTag("Bad"))
+        if(gameObject.layer != enemyLayer)
         {
-            gameManager.UpdateLives(-1);            
+            _gameManager.UpdateLives(-1);            
         }    
     }
 
     Vector3 RandomForce()
     {
-        return Vector3.up * Random.Range(minSpeed, maxSpeed);
+        return Vector3.up * Random.Range(_minSpeed, _maxSpeed);
     }
     float RandomTorque()
     {
-        return Random.Range(-maxTorque, maxTorque);
+        return Random.Range(-_maxTorque, _maxTorque);
     }
     Vector3 RandomSpawnPos()
     {
-        return new Vector3(Random.Range(-xRange, xRange), ySpawnPos);
+        return new Vector3(Random.Range(-_xRange, _xRange), _ySpawnPos);
     }
 
     public void DestroyTarget()
     {
-        if (gameManager.isGameActive)
+        if (_gameManager.IsGameActive)
         {
             Destroy(gameObject);
-            Instantiate(explosionParticle, transform.position,
-            explosionParticle.transform.rotation);
-            gameManager.UpdateScore(pointValue);
+            Instantiate(_explosionParticle, transform.position,
+            _explosionParticle.transform.rotation);
+            _gameManager.UpdateScore(_pointValue);
         }
     }
 

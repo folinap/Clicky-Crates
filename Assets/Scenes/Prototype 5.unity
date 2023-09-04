@@ -695,6 +695,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   difficulty: 2
+  gameManager: {fileID: 353065425}
 --- !u!114 &311813421
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -738,7 +739,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 311813422}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 311813420}
+        m_TargetAssemblyTypeName: DifficultyButton, Assembly-CSharp
+        m_MethodName: SetDifficulty
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &311813422
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -789,7 +802,7 @@ GameObject:
   - component: {fileID: 325230400}
   - component: {fileID: 325230399}
   - component: {fileID: 325230398}
-  - component: {fileID: 325230397}
+  - component: {fileID: 325230401}
   m_Layer: 5
   m_Name: Easy Button
   m_TagString: Untagged
@@ -818,19 +831,6 @@ RectTransform:
   m_AnchoredPosition: {x: -115, y: -38.56}
   m_SizeDelta: {x: 100, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &325230397
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 325230395}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 280938ce9c0046949bd9dbe0814146b2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  difficulty: 1
 --- !u!114 &325230398
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -874,7 +874,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 325230399}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 325230401}
+        m_TargetAssemblyTypeName: DifficultyButton, Assembly-CSharp
+        m_MethodName: SetDifficulty
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &325230399
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -913,6 +925,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 325230395}
   m_CullTransparentMesh: 1
+--- !u!114 &325230401
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 325230395}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 280938ce9c0046949bd9dbe0814146b2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  difficulty: 1
+  gameManager: {fileID: 353065425}
 --- !u!1 &353065424
 GameObject:
   m_ObjectHideFlags: 0
@@ -942,18 +968,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 952709c0ab695984bb1652f1f687240c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targets:
+  _targets:
   - {fileID: 1228300127211742480, guid: 850aeabfde53fe04abef1f47071c5f1e, type: 3}
   - {fileID: 7872033852827129596, guid: 8cbc74c6e048fb94191d70113b1326ff, type: 3}
   - {fileID: 7607699361872996504, guid: f6f73b5e98d6a434ab9309562c526046, type: 3}
   - {fileID: 5898726394049854689, guid: 115cc67dabb276947b0403fb5c3087f3, type: 3}
-  scoreText: {fileID: 152593341}
-  gameoverText: {fileID: 1853607670}
-  livesText: {fileID: 1918553683}
-  restartButton: {fileID: 676700481}
-  titleScreen: {fileID: 2123742150}
-  pauseScreen: {fileID: 25708565}
-  isGameActive: 0
+  _scoreText: {fileID: 152593341}
+  _gameoverText: {fileID: 1853607670}
+  _livesText: {fileID: 1918553683}
+  _restartButton: {fileID: 676700481}
+  _titleScreen: {fileID: 2123742150}
+  _pauseScreen: {fileID: 25708565}
 --- !u!4 &353065426
 Transform:
   m_ObjectHideFlags: 0
@@ -2079,6 +2104,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f604cceb4aaf919429552ef7ac267462, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _gameManager: {fileID: 353065425}
+  _cam: {fileID: 534669904}
+  _trail: {fileID: 1435840049}
+  _col: {fileID: 1435840048}
+  _mousePos: {x: 0, y: 0, z: 0}
 --- !u!65 &1435840048
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -3162,6 +3192,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   difficulty: 3
+  gameManager: {fileID: 353065425}
 --- !u!114 &2067794708
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3205,7 +3236,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2067794709}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2067794707}
+        m_TargetAssemblyTypeName: DifficultyButton, Assembly-CSharp
+        m_MethodName: SetDifficulty
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &2067794709
 MonoBehaviour:
   m_ObjectHideFlags: 0
